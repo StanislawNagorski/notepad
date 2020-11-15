@@ -1,10 +1,14 @@
-package com.sda.training.spring.notepad;
+package com.sda.training.spring.notepad.services;
 
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.sda.training.spring.notepad.services.decorators.ContentModifier;
+import com.sda.training.spring.notepad.services.exepction.NoteCreationException;
+import com.sda.training.spring.notepad.models.Note;
+import com.sda.training.spring.notepad.repositories.NoteRepository;
+import com.sda.training.spring.notepad.services.exepction.NoteNotFoundException;
+import com.sda.training.spring.notepad.services.loggers.CustomLogger;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -24,17 +28,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class NoteService {
 	private final NoteRepository noteRepository;
-//	private final FrameAppender frameAppender;
 	private final List<ContentModifier> modifiers;
+	private final CustomLogger logger;
 
-	public Optional<Note> save(Note note){
+	public Note save(Note note) throws NoteCreationException {
+		logger.log("save of ", String.valueOf(note.getId()));
 		if (note.getId() != null && noteRepository.findById(note.getId()).isPresent()){
-			return Optional.empty();
+			throw new NoteCreationException("Cannot save note with id:" + note.getId());
 		}
 		note.setContent(modify(note));
 
-//		note.setContent(frameAppender.execute(note.getContent()));
-		return Optional.of(noteRepository.save(note));
+		return noteRepository.save(note);
 	}
 
 	private String modify(Note note) {
@@ -49,10 +53,10 @@ public class NoteService {
 		return noteRepository.findAll();
 	}
 
-	public Optional<Note> update(Long id, Note note){
+	public Note update(Long id, Note note){
 		Optional<Note> byId = noteRepository.findById(id);
 		if(byId.isEmpty()){
-			return byId;
+			throw new NoteCreationException("Cannot modify note with id:" + note.getId());
 		}
 		Note noteFromDb = byId.get();
 		noteFromDb.setTitle(note.getTitle());
@@ -61,24 +65,28 @@ public class NoteService {
 		noteFromDb.setCreationTime(note.getCreationTime());
 
 		note.setContent(modify(note));
-		return Optional.of(noteRepository.save(noteFromDb));
+		return noteRepository.save(noteFromDb);
 	}
 
-	public Optional<Note> findById(Long id){
-		return noteRepository.findById(id);
+	public Note findById(Long id){
+		Optional<Note> byId = noteRepository.findById(id);
+		if (byId.isEmpty()){
+			throw new NoteNotFoundException("Note not found id:" + id);
+		}
+		return byId.get();
 	}
 
-	public Optional<Note> delete(Long id){
+	public Note delete(Long id){
 		Optional<Note> byId = noteRepository.findById(id);
 		if(byId.isEmpty()){
-			return byId;
+			throw new NoteNotFoundException("Note not found id:" + id);
 		}
 		noteRepository.deleteById(id);
-		return byId;
+		return byId.get();
 	}
 
 	public List<Note> findByTitleAndContentContains(String title, String content){
-		return noteRepository.findByTitleAndContentContains(title, content);
+		return noteRepository.findByTitleAndContentContaining(title, content);
 	}
 
 }

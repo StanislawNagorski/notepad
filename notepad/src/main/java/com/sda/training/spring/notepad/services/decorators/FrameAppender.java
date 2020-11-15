@@ -1,10 +1,10 @@
-package com.sda.training.spring.notepad;
+package com.sda.training.spring.notepad.services.decorators;
 
 import org.springframework.stereotype.Component;
 
 @Component
-public class FrameAppender implements ContentModifier{
-	private static final String FRAME = "********************";
+public class FrameAppender implements ContentModifier {
+	private static final String FRAME = "**";
 
 	public String execute(String content){
 		StringBuilder sb = new StringBuilder();

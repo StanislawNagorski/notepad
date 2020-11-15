@@ -1,9 +1,10 @@
-package com.sda.training.spring.notepad;
+package com.sda.training.spring.notepad.repositories;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 
+import com.sda.training.spring.notepad.models.Note;
 import org.springframework.stereotype.Repository;
 
 import lombok.RequiredArgsConstructor;

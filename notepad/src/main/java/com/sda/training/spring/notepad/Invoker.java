@@ -3,6 +3,8 @@ package com.sda.training.spring.notepad;
 
 import java.time.LocalDateTime;
 
+import com.sda.training.spring.notepad.models.Note;
+import com.sda.training.spring.notepad.repositories.NoteRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +18,7 @@ public class Invoker implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		Note sampleNote = new Note();
-		sampleNote.setTitle("sample title");
+		sampleNote.setTitle("Sample title");
 		sampleNote.setContent("Lorem ipsum ...");
 		sampleNote.setCreationTime(LocalDateTime.now());
 		sampleNote.setUpdateTime(LocalDateTime.now());
