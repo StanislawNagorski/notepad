@@ -3,12 +3,14 @@ package com.sda.training.spring.notepad.services;
 import java.util.List;
 import java.util.Optional;
 
+import com.sda.training.spring.notepad.Roles;
 import com.sda.training.spring.notepad.services.decorators.ContentModifier;
 import com.sda.training.spring.notepad.services.exepction.NoteCreationException;
 import com.sda.training.spring.notepad.models.Note;
 import com.sda.training.spring.notepad.repositories.NoteRepository;
 import com.sda.training.spring.notepad.services.exepction.NoteNotFoundException;
 import com.sda.training.spring.notepad.services.loggers.CustomLogger;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,7 @@ public class NoteService {
 	private final List<ContentModifier> modifiers;
 	private final CustomLogger logger;
 
+	@Secured("ROLE_ADMIN")
 	public Note save(Note note) throws NoteCreationException {
 		logger.log("save of ", String.valueOf(note.getId()));
 		if (note.getId() != null && noteRepository.findById(note.getId()).isPresent()){

@@ -26,12 +26,14 @@ public class NoteControllerV1 {
         return "hello World!";
     }
 
+    //tylko user
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.FOUND)
     public Note getById(@PathVariable Long id) {
         return noteService.findById(id);
     }
 
+    //tylko admin
     @GetMapping
     public List<Note> getAllNotes() {
         return noteService.findAll();

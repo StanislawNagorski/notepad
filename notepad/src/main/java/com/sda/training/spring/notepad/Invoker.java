@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import com.sda.training.spring.notepad.models.Note;
 import com.sda.training.spring.notepad.repositories.NoteRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class Invoker implements CommandLineRunner {
 	private final NoteRepository noteRepository;
+	private final PasswordEncoder passwordEncoder;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -24,5 +26,13 @@ public class Invoker implements CommandLineRunner {
 		sampleNote.setUpdateTime(LocalDateTime.now());
 
 		noteRepository.save(sampleNote);
+
+		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		System.out.println(passwordEncoder.encode("user"));
+		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		System.out.println(passwordEncoder.encode("admin"));
+
+
+
 	}
 }
